@@ -1,10 +1,80 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title></title>
-</head>
-<body>
 
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+
+</head>
+
+<body>
+    <div ng-app="myApp" ng-init="mySwitch=true">
+        {{mySwitch}}
+
+        <button ng-click="count=count+1">点我!</button>
+        {{count}}
+
+        <input type="checkbox" ng-model="mySwitch">按钮
+        <div ng-controller="myCtrl">
+            <input type="text" ng-model="username">
+            <ul>
+                {{username | myFormat}}
+            </ul>
+
+        </div>
+        <div ng-controller="BindData">
+            <ul>
+                <li ng-repeat="x in names">
+                    {{x.Name}}
+                </li>
+            </ul>
+            {{names}}
+
+            <select ng-init="selectedName=names[0]" ng-model="selectedName" ng-options="x.Name for x in names"></select>
+
+            {{selectedName.Url}}
+
+        </div>
+        
+<div>测试显示</div>
+    </div>
+    <script>
+        var app = angular.module('myApp', []);
+
+
+        app.controller('BindData', function ($scope, $http) {
+            //             $http({
+            //             method:'post',
+            // url:'sites.html'
+            //         }).then(function successCallback(response){
+            //             console.log(response);
+            //         })
+            $scope.names = [{ "Name": "菜鸟教程", "Url": "www.runoob.com", "Country": "CN" }, { "Name": "Google", "Url": "www.google.com", "Country": "USA" }, { "Name": "Facebook", "Url": "www.facebook.com", "Country": "USA" }, { "Name": "微博", "Url": "www.weibo.com", "Country": "CN" }];
+            $scope.types = ["Google", "Runoob", "Taobao"];
+        })
+
+
+        //创建服务器
+        app.service('hexafy', function () {
+            this.myFunc = function (x) {
+                return x + 1;
+            }
+        })
+
+        //定义控制器
+        app.controller('myCtrl', function ($scope, hexafy) {
+            $scope.username = 255;
+
+        })
+
+        //创建过滤器
+        app.filter('myFormat', ['hexafy', function (hexafy) {
+            return function (x) {
+                return hexafy.myFunc(x);
+            }
+        }])
+    </script>
 </body>
+
 </html>
